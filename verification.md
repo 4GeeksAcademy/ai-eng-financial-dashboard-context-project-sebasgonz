@@ -85,3 +85,38 @@ Los siguientes resultados corresponden a la fase anterior registrada en la conve
 - `docker compose up --build -d` y requests HTTP a `/` y `/api/metrics` vía Vite — ambos devolvieron `200`; Compose informa ambos servicios activos.
 
 Los tests existentes del frontend verifican utilidades financieras, no el nuevo texto del período ni la interacción visual. El build valida la compilación de ese cambio, pero no sustituye una prueba de comportamiento en navegador. Las advertencias de bundle y deprecación se registraron sin tratarlas como fallos ni corregir dependencias ajenas al alcance.
+
+## Fase 2
+
+### Objetivo y decisiones del usuario
+
+Identificar convenciones útiles y patrones arriesgados para futuros contribuidores o agents, conservando solo hallazgos vinculados a archivos o comportamientos concretos. El usuario eligió revisar frontend, backend, Docker y documentación, sin restricciones adicionales, y guardar las reglas propuestas en `.agents/rules`. También pidió revisar las propuestas antes del commit y aprobó las 11 el 2026-10-17.
+
+### Trabajo realizado
+
+✅ Se contrastaron contratos, utilidades financieras, tests, Compose y Dockerfile con el código real y las referencias de la Fase 1. Se descartaron recomendaciones genéricas sin evidencia local.
+
+✅ Se redactaron [11 reglas propuestas](.agents/rules/proposed-contributor-rules.md), agrupadas por categoría. Cada regla identifica un hecho del repo, su riesgo, una acción propuesta y un criterio de comprobación:
+
+| Categoría | Reglas | Evidencia que motivó las propuestas |
+| --- | --- | --- |
+| Arquitectura y contratos | R01–R02 | Python y TypeScript definen el mismo contrato por separado; App calcula los indicadores en cliente aunque la API también ofrece agregados. |
+| Naming y organización | R03 | Los campos del JSON usan snake_case, los resultados del cliente camelCase; existen carpetas separadas para componentes del dashboard y primitivas UI. |
+| Datos, fechas y finanzas | R04–R06 | El generador usa reloj y estado aleatorio global; la agrupación mensual mezcla parseo UTC con getters locales; el formato USD oculta decimales que sí existen en los importes. |
+| Docker y configuración | R07 | El origen del navegador y el destino de Vite usan variables distintas; el camino por el gateway depende del puerto publicado. |
+| Testing | R08–R09 | Algunos tests comprueban respuesta y estructura, pero no el filtro o los importes que sugieren sus nombres; los tests unitarios no atraviesan el proxy ni renderizan App. |
+| Documentación y DX | R10–R11 | Ambos README describen el mismo procedimiento; el arranque real usa Vite dev, recarga de Uvicorn y debugpy, no una configuración de producción validada. |
+
+### Comprobaciones y límites
+
+✅ Se validaron los enlaces locales y la presencia de hecho, riesgo, regla y comprobación en las 11 propuestas. Antes del cierre había 27 enlaces; se volvió a validar el documento tras registrar la aprobación.
+
+✅ Se reprodujo el riesgo de R05 con Node bajo `TZ=America/Los_Angeles`: para `new Date("2024-02-01")`, el mes local fue `1` (enero) y el mes UTC `2` (febrero). Esto confirma el desplazamiento en la operación usada por la utilidad; no equivale a ejecutar toda la aplicación o su suite en esa zona horaria.
+
+﹖ No se comprobó nuevamente el funcionamiento completo en navegador ni se repitieron build, tests o pruebas HTTP de la Fase 1. Esta fase es documental y no afirma que se hayan corregido los riesgos detectados.
+
+### Resultado y commit dedicado
+
+✅ El usuario aprobó el análisis y las propuestas. Solo se incorporaron el documento de reglas y esta sección de verificación, sin cambios funcionales ni activación automática de las reglas como instrucciones obligatorias.
+
+Mensaje del commit de cierre: `Fase 2 — Identificar convenciones y patrones arriesgados (con el agent) completada`.
