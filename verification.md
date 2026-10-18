@@ -183,3 +183,31 @@ Se movió `proposed-contributor-rules.md` a `agents/rules` sin reescribir su con
 - No se cambiaron implementaciones, datos, rutas API, tests ni comportamiento. Antes del commit, el estado de Git contiene únicamente el traslado y las ediciones documentales de esta reorganización.
 
 Mensaje del commit dedicado: `Fase 3 — Ajustar carpeta agents a lo requerido (actualización) completada`.
+
+## Fase 4: banco de memoria del proyecto
+
+### Alcance acordado
+
+El usuario pidió crear `memory-bank/` en la raíz y cubrir overview verificable, stack, estado actual y prioridades, rechazando afirmaciones sin soporte y roadmaps inventados. Se acordó redactar en español, incluir gaps demostrables sin ordenarlos y mantener esta fase documental. El usuario revisará el contenido antes de cualquier commit.
+
+### Documento creado y fuentes
+
+Se creó [memory-bank/README.md](memory-bank/README.md) como entrada única del banco de memoria para evitar duplicar documentos. El overview enlaza a README, App, utilidades, componentes y rutas API; el stack cita `package.json`, `requirements.txt`, Dockerfile y Compose; el estado separa capacidades, comprobaciones y gaps. La sección de prioridades declara que el repo no ofrece roadmap ni ranking y deja cualquier priorización al responsable del producto.
+
+No se afirma que exista una fuente de datos financiera productiva, persistencia, autenticación o despliegue de producción. Se distinguen los endpoints disponibles de los que consume actualmente la UI y se registra como gap, no como corregido, el desplazamiento mensual reproducido en zonas al oeste de UTC.
+
+### Validación ejecutada el 2026-10-18
+
+- `docker compose config --format json` — válido; dos servicios y puertos publicados frontend `5173`, backend `8000` y depurador `5678`.
+- `docker compose run --rm --no-deps frontend npm test` — 5 tests aprobados.
+- `docker compose run --rm --no-deps backend pytest -q` — 15 tests aprobados y advertencia de deprecación Starlette/httpx.
+- `docker compose up --build -d` — ambos servicios arrancaron; frontend HTTP `200`; `/api/metrics` vía Vite HTTP `200` con 360 movimientos. `docker compose ps` confirmó ambos contenedores activos.
+- `gh api repos/4GeeksAcademy/ai-eng-financial-dashboard-context-project-sebasgonz --jq '{full_name: .full_name, fork: .fork, parent: .parent.full_name}'` — confirmó `fork: true` y padre `4GeeksAcademy/ai-eng-financial-dashboard-context-project`.
+- Validador de Markdown — las secciones mínimas existen y los 37 enlaces locales de `memory-bank/README.md` resuelven.
+- Búsqueda de auth, tokens, OAuth y dependencias de base de datos — sin resultados en los archivos del repo. Esto respalda que no hay configuración encontrada, no una afirmación sobre capacidades externas.
+
+No se ejecutó build ni prueba visual en esta fase. El arranque y las respuestas HTTP se comprobaron en Docker, pero no se validó el renderizado o interacción en navegador. El estado se basa en código, configuración y las pruebas arriba; no garantiza una ejecución visual end-to-end.
+
+### Revisión y commit
+
+Pendiente de revisión del usuario. El commit dedicado se creará solo después de su aprobación; hasta entonces no se prepara ni se incluye ningún cambio en staging.
