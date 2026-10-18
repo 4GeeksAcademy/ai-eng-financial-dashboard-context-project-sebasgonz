@@ -28,13 +28,17 @@ _Financial metrics dashboard with a React + TypeScript frontend and a FastAPI ba
 ## Expected agents directory structure
 
 ```text
-./.agents
-└─ /rules
+agents/
+└─ rules/
    └─ <rule-name>.md
-└─ /skills
-   └─ /<skill-name>
-      └─ /SKILL.md
+.agents/
+├─ rules/
+│  └─ proposed-contributor-rules.md
+└─ skills/ (optional)
+   └─ <skill-name>/SKILL.md
 ```
+
+The user selected [agents/rules](agents/rules), without a leading dot, for Phase 3 rules; [AGENTS.md](AGENTS.md) indexes them. Final approval is pending; `.agents/rules` preserves the Phase 2 historical analysis. The optional skills directory does not have to exist.
 
 ## How to run locally
 
@@ -48,6 +52,38 @@ When running Vite outside Compose or targeting another API origin, set `VITE_API
 - Frontend: http://localhost:5173
 - Backend: http://localhost:8000
 - API documentation: http://localhost:8000/docs
+
+In Codespaces, use forwarded-port URLs; the localhost links above apply to a local run publishing those ports. This Compose setup is for development: Vite dev, Uvicorn with reload, and debugpy on `5678`, which must not be publicly exposed.
+
+| Variable | Consumer | Current use |
+| --- | --- | --- |
+| `VITE_API_BASE_URL` | Browser, through Vite | Optional API origin; empty uses same-origin `/api/metrics`. |
+| `API_PROXY_TARGET` | Vite server | Compose sets `http://host.docker.internal:8000` and the gateway alias; without the variable, Vite uses `http://backend:8000`. |
+
+If the backend published port changes, also review the proxy target. Internal Docker names are not public browser addresses.
+
+## Dashboard Data Contract
+
+The dashboard requests `GET /api/metrics` and computes KPIs and monthly series on the client; those charts do not consume `/api/metrics/summary`. Each movement includes `create_date` (ISO date), `amount`, `operation_type`, `category`, and `business_type`, keeping JSON names in snake_case.
+
+For example, `GET /api/metrics?operation_type=income` returns only income records. Allowed values are defined in both [routes.py](backend/app/routes.py) and [financial-types.ts](frontend/src/lib/financial-types.ts); contract changes must review both definitions and their consumers.
+
+## Data and Calculations
+
+The API generates 360 sample movements with clock-dependent dates; a fixed seed does not fix the year. With income of `1000` and outcome of `250`, profit is `750` and profit as a percentage of income is `75%`. Without income, the percentage is `0`. Whole-dollar USD formatting is presentation only.
+
+Known limitation: monthly grouping converts ISO dates to `Date` and reads the local month; `2024-02-01` can be grouped as January west of UTC. This has been reproduced, not fixed in this documentation-only phase.
+
+## Isolated Validation
+
+From the repository root, with Docker and images containing the dependencies available:
+
+```bash
+docker compose run --rm --no-deps frontend npm test
+docker compose run --rm --no-deps backend pytest -q
+```
+
+These commands do not require running services or start their dependencies. They check frontend utilities and backend routes, not the browser or proxy. Containers use repository volumes and may generate caches. Add pytest `-k` to select a backend task; also validate the build when types or components change.
 
 ---
 

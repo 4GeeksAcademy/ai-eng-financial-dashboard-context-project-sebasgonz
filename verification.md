@@ -120,3 +120,48 @@ Identificar convenciones útiles y patrones arriesgados para futuros contribuido
 ✅ El usuario aprobó el análisis y las propuestas. Solo se incorporaron el documento de reglas y esta sección de verificación, sin cambios funcionales ni activación automática de las reglas como instrucciones obligatorias.
 
 Mensaje del commit de cierre: `Fase 2 — Identificar convenciones y patrones arriesgados (con el agent) completada`.
+
+## Fase 3
+
+### Alcance acordado y archivos redactados
+
+El usuario eligió `agents/rules` sin punto y autorizó solo documentación y comprobaciones, sin cambios de comportamiento. Se conservaron las propuestas de Fase 2 en `.agents/rules` como historial. Se actualizó AGENTS para descubrir la ubicación nueva y se sincronizaron ambos README. No se modificaron implementaciones, contratos ni tests existentes.
+
+Las 11 propuestas se concretaron en cinco archivos, cada uno con nombre, alcance, justificación respaldada por archivos, guía y criterio de salida. Las reglas quedan como candidatas hasta la revisión final del usuario.
+
+| Regla | Propuestas de origen | Tarea pequeña real y resultado |
+| --- | --- | --- |
+| [Arquitectura y naming](agents/rules/architecture-and-naming.md) | R01–R03 | Se documentaron el contrato y el ejemplo `GET /api/metrics?operation_type=income` en ambos README. TestClient devolvió `200` y 197 registros; todos tenían los campos requeridos y eran ingresos. No se cambió la ruta. |
+| [Datos, fechas y precisión](agents/rules/financial-data-and-dates.md) | R04–R06 | Se documentaron datos de muestra, fórmula y limitación de fechas. Se ejecutaron las utilidades reales: ingresos `1000`, egresos `250`, utilidad `750`, porcentaje `75`; sin ingresos, porcentaje `0`. Con `2024-02-01`, la agrupación dio `Feb 2024` en UTC y `Jan 2024` en Los Ángeles. Defecto reproducido, no corregido. |
+| [Ejecución y red](agents/rules/runtime-and-networking.md) | R07, R11 | Se añadió tabla bilingüe de variables y límites de desarrollo. Se comparó Compose en JSON con consumidores y Dockerfile: servicios frontend/backend, puertos `5173`, `8000`, `5678`, destino gateway y alias correctos. No se iniciaron servidores ni se probó HTTP por Vite. |
+| [Testing y evidencia](agents/rules/testing-and-evidence.md) | R08–R09 | Se documentaron comandos aislados con `--no-deps`. Se ejecutaron los 5 tests de utilidades del frontend y 2 tests de filtros del backend: todos pasaron. Los otros 13 de backend quedaron excluidos en esta comprobación focalizada. |
+| [Documentación y workflow](agents/rules/documentation-and-workflow.md) | R10 y cierre acordado | Se corrigió el índice AGENTS y los árboles bilingües para la ubicación nueva y se añadió este registro. Pasaron los 62 enlaces locales, las anclas de Fase 3, la estructura de las cinco reglas y la paridad de comandos y variables entre README. El diff confirmó solo los nueve archivos documentales previstos; no se preparó ni creó commit. |
+
+### Refinamientos derivados de las tareas
+
+- La importación directa de `financial-utils.ts` con Node falló al resolver el import de tipos sin extensión. Se refinó la regla para usar el TypeScript existente y transpilar la utilidad en memoria, sin tocar imports ni instalar otro runner. La repetición de la comprobación pasó y reprodujo el defecto de fechas con la función real, no una copia del algoritmo.
+- El primer validador de Compose supuso que `extra_hosts` era un mapa y falló. Se inspeccionó la salida real, una lista con `host.docker.internal=host-gateway`, y se adaptó el lector para aceptar esa estructura o un mapa. Se documentó la diferencia en la regla; la nueva comprobación pasó sin cambiar Compose.
+- Se usó `docker compose run --rm --no-deps`, en lugar de `exec` o `run` con dependencias implícitas. Los contenedores temporales no necesitan servicios activos ni publican sus puertos por defecto, aunque pueden escribir cachés en los volúmenes.
+- Se separó el estado de regla candidata de la autorización de cambios: redactar una guía no autoriza a corregir el defecto de fechas ni a reforzar tests funcionales cuando el usuario solo permite documentación.
+
+### Comprobaciones reproducibles y límites
+
+Comandos desde la raíz para la tarea de testing:
+
+```bash
+docker compose run --rm --no-deps frontend npm test
+docker compose run --rm --no-deps backend pytest -q -k 'metrics_endpoint_filters_by_operation_type or metrics_endpoint_filters_by_category'
+docker compose config --format json
+git status --short --untracked-files=all
+git diff --check
+```
+
+Las comprobaciones de contrato y utilidades se ejecutaron mediante comandos puntuales en contenedores con las dependencias existentes: TestClient para el filtro de ingresos; `typescript.transpileModule` y aserciones Node para KPIs y agrupación en ambas zonas. No se añadieron scripts o tests permanentes para esta fase documental.
+
+La validación documental comprobó también whitespace de los cinco archivos nuevos con `git diff --no-index --check`, porque todavía no están rastreados; `git diff --check` pasó para los documentos existentes. No se incluyeron cachés ni cambios funcionales y no se añadió ningún archivo al staging.
+
+Sigue apareciendo la advertencia de deprecación de Starlette/httpx. No se repitió build, prueba visual ni prueba HTTP del proxy porque no se cambió código funcional ni conectividad. Los resultados de esta fase no demuestran que el fallo de fechas esté corregido ni que los tests débiles de Fase 2 se hayan reforzado.
+
+### Revisión y commit
+
+Pendiente de revisión final del usuario. El commit dedicado se creará después de la aprobación, no durante la validación. Se incluirán únicamente los cinco archivos de reglas, AGENTS, ambos README y este registro, siempre que el diff confirme ese alcance.
