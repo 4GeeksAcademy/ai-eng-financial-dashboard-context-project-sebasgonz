@@ -2,7 +2,7 @@
 
 ## Alcance
 
-Cambios en `frontend/src/App.tsx`, `frontend/src/lib`, componentes y `backend/app`. Concreta R01-R03 de [Fase 2](../../.agents/rules/proposed-contributor-rules.md). Regla candidata de Fase 3, pendiente de aprobacion final; no autoriza refactorizaciones ajenas a la tarea.
+Cambios en `frontend/src/App.tsx`, `frontend/src/lib`, componentes y `backend/app`. Concreta R01-R03 de [Fase 2](proposed-contributor-rules.md). Regla aprobada tras la validacion de Fase 3; no autoriza refactorizaciones ajenas a la tarea.
 
 ## Justificacion
 

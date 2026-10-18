@@ -2,7 +2,7 @@
 
 ## Alcance
 
-Validacion de tareas que afectan documentacion, utilidades, API, interfaz o red. Concreta R08-R09 de [Fase 2](../../.agents/rules/proposed-contributor-rules.md). Regla candidata pendiente de aprobacion final.
+Validacion de tareas que afectan documentacion, utilidades, API, interfaz o red. Concreta R08-R09 de [Fase 2](proposed-contributor-rules.md). Regla aprobada tras la validacion de Fase 3.
 
 ## Justificacion
 

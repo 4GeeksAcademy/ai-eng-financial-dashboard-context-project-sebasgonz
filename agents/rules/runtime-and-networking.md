@@ -2,7 +2,7 @@
 
 ## Alcance
 
-`docker-compose.yml`, ambos Dockerfile, `frontend/vite.config.ts`, configuracion de solicitudes y documentacion de arranque. Concreta R07 y R11 de [Fase 2](../../.agents/rules/proposed-contributor-rules.md). Regla candidata pendiente de aprobacion final.
+`docker-compose.yml`, ambos Dockerfile, `frontend/vite.config.ts`, configuracion de solicitudes y documentacion de arranque. Concreta R07 y R11 de [Fase 2](proposed-contributor-rules.md). Regla aprobada tras la validacion de Fase 3.
 
 ## Justificacion
 

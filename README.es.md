@@ -29,16 +29,14 @@ _Dashboard de métricas financieras con frontend en React + TypeScript y backend
 
 ```text
 agents/
-└─ rules/
-   └─ <nombre-regla>.md
-.agents/
 ├─ rules/
-│  └─ proposed-contributor-rules.md
+│  ├─ <nombre-regla>.md
+│  └─ proposed-contributor-rules.md (análisis histórico de Fase 2)
 └─ skills/ (opcional)
    └─ <nombre-skill>/SKILL.md
 ```
 
-Por decisión del usuario, las reglas de Fase 3 están en [agents/rules](agents/rules), sin punto, y su índice está en [AGENTS.md](AGENTS.md). Están pendientes de aprobación final; `.agents/rules` conserva el análisis histórico de Fase 2. No se requiere que la carpeta opcional de skills exista.
+Las reglas aprobadas y el análisis histórico de Fase 2 están consolidados en [agents/rules](agents/rules); [AGENTS.md](AGENTS.md) los indexa. La carpeta opcional de skills, si se crea, va en `agents/skills`.
 
 ## Cómo ejecutar en local
 

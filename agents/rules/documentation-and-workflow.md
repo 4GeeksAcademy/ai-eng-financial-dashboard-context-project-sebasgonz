@@ -2,11 +2,11 @@
 
 ## Alcance
 
-`AGENTS.md`, README bilingue, `agents/rules`, registro de verificacion y preparacion de commits. Concreta R10 de [Fase 2](../../.agents/rules/proposed-contributor-rules.md) y el cierre documental acordado con el usuario. Regla candidata pendiente de aprobacion final.
+`AGENTS.md`, README bilingue, `agents/rules`, registro de verificacion y preparacion de commits. Concreta R10 de [Fase 2](proposed-contributor-rules.md) y el cierre documental acordado con el usuario. Regla aprobada tras la validacion de Fase 3.
 
 ## Justificacion
 
-[AGENTS.md](../../AGENTS.md) es el punto de entrada para agents. [README.md](../../README.md) y [README.es.md](../../README.es.md) describen la misma ejecucion en dos idiomas. Las propuestas historicas permanecen en `.agents/rules`; el usuario eligio `agents/rules` sin punto para esta fase. [verification.md](../../verification.md) separa resultados historicos de comprobaciones nuevas.
+[AGENTS.md](../../AGENTS.md) es el punto de entrada para agents. [README.md](../../README.md) y [README.es.md](../../README.es.md) describen la misma ejecucion en dos idiomas. Las reglas aprobadas y el analisis historico se mantienen en el unico directorio `agents/rules`. [verification.md](../../verification.md) separa resultados historicos de comprobaciones nuevas.
 
 ## Guia
 

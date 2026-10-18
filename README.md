@@ -29,16 +29,14 @@ _Financial metrics dashboard with a React + TypeScript frontend and a FastAPI ba
 
 ```text
 agents/
-└─ rules/
-   └─ <rule-name>.md
-.agents/
 ├─ rules/
-│  └─ proposed-contributor-rules.md
+│  ├─ <rule-name>.md
+│  └─ proposed-contributor-rules.md (Phase 2 historical analysis)
 └─ skills/ (optional)
    └─ <skill-name>/SKILL.md
 ```
 
-The user selected [agents/rules](agents/rules), without a leading dot, for Phase 3 rules; [AGENTS.md](AGENTS.md) indexes them. Final approval is pending; `.agents/rules` preserves the Phase 2 historical analysis. The optional skills directory does not have to exist.
+Approved rules and the historical Phase 2 analysis are consolidated under [agents/rules](agents/rules), indexed by [AGENTS.md](AGENTS.md). If created, the optional skills directory belongs under `agents/skills`.
 
 ## How to run locally
 

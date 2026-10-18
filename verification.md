@@ -90,13 +90,13 @@ Los tests existentes del frontend verifican utilidades financieras, no el nuevo 
 
 ### Objetivo y decisiones del usuario
 
-Identificar convenciones útiles y patrones arriesgados para futuros contribuidores o agents, conservando solo hallazgos vinculados a archivos o comportamientos concretos. El usuario eligió revisar frontend, backend, Docker y documentación, sin restricciones adicionales, y guardar las reglas propuestas en `.agents/rules`. También pidió revisar las propuestas antes del commit y aprobó las 11 el 2026-10-17.
+Identificar convenciones útiles y patrones arriesgados para futuros contribuidores o agents, conservando solo hallazgos vinculados a archivos o comportamientos concretos. El usuario eligió revisar frontend, backend, Docker y documentación, sin restricciones adicionales, y guardar las reglas propuestas. Inicialmente se redactaron en `.agents/rules`; en una actualización de Fase 3 se consolidaron en `agents/rules`. El usuario revisó y aprobó las 11 el 2026-10-17.
 
 ### Trabajo realizado
 
 ✅ Se contrastaron contratos, utilidades financieras, tests, Compose y Dockerfile con el código real y las referencias de la Fase 1. Se descartaron recomendaciones genéricas sin evidencia local.
 
-✅ Se redactaron [11 reglas propuestas](.agents/rules/proposed-contributor-rules.md), agrupadas por categoría. Cada regla identifica un hecho del repo, su riesgo, una acción propuesta y un criterio de comprobación:
+✅ Se redactaron [11 reglas propuestas](agents/rules/proposed-contributor-rules.md), agrupadas por categoría. Cada regla identifica un hecho del repo, su riesgo, una acción propuesta y un criterio de comprobación:
 
 | Categoría | Reglas | Evidencia que motivó las propuestas |
 | --- | --- | --- |
@@ -125,9 +125,9 @@ Mensaje del commit de cierre: `Fase 2 — Identificar convenciones y patrones ar
 
 ### Alcance acordado y archivos redactados
 
-El usuario eligió `agents/rules` sin punto y autorizó solo documentación y comprobaciones, sin cambios de comportamiento. Se conservaron las propuestas de Fase 2 en `.agents/rules` como historial. Se actualizó AGENTS para descubrir la ubicación nueva y se sincronizaron ambos README. No se modificaron implementaciones, contratos ni tests existentes.
+El usuario eligió `agents/rules` sin punto y autorizó solo documentación y comprobaciones, sin cambios de comportamiento. En la primera parte de Fase 3 se conservaron las propuestas históricas de Fase 2 en `.agents/rules`; la actualización de ubicación documentada abajo las consolida en el único directorio `agents/rules`. No se modificaron implementaciones, contratos ni tests existentes.
 
-Las 11 propuestas se concretaron en cinco archivos, cada uno con nombre, alcance, justificación respaldada por archivos, guía y criterio de salida. Las reglas quedan como candidatas hasta la revisión final del usuario.
+Las 11 propuestas se concretaron en cinco archivos, cada uno con nombre, alcance, justificación respaldada por archivos, guía y criterio de salida. En ese momento estaban pendientes de revisión; el usuario aprobó las cinco guías al cerrar Fase 3, antes del commit `e0b9c0f`.
 
 | Regla | Propuestas de origen | Tarea pequeña real y resultado |
 | --- | --- | --- |
@@ -164,4 +164,22 @@ Sigue apareciendo la advertencia de deprecación de Starlette/httpx. No se repit
 
 ### Revisión y commit
 
-Pendiente de revisión final del usuario. El commit dedicado se creará después de la aprobación, no durante la validación. Se incluirán únicamente los cinco archivos de reglas, AGENTS, ambos README y este registro, siempre que el diff confirme ese alcance.
+Al redactar esta sección estaba pendiente la revisión final. Después, el usuario aprobó la fase y se creó el commit dedicado `e0b9c0f` con los cinco archivos de reglas, AGENTS, ambos README y este registro.
+
+### Actualización de Fase 3: consolidar el directorio de agents
+
+#### Motivo y cambio
+
+Al revisar Fase 3, el usuario observó que coexistían `agents/rules` y `.agents/rules`, aunque el requisito indica `agents/rules`. Las cinco reglas ya vivían en la ubicación solicitada; el análisis histórico de Fase 2 era el único archivo bajo `.agents/rules`.
+
+Se movió `proposed-contributor-rules.md` a `agents/rules` sin reescribir su contenido. Se actualizaron AGENTS, los dos README, las cinco reglas y este historial para apuntar a la ruta única. La guía de descubrimiento de skills se alineó a `agents/skills` como directorio opcional. Se quitaron `.agents/rules` y `.agents` cuando quedaron vacíos. La mención de `.agents/rules` en esta historia conserva la ubicación original, no una ruta vigente.
+
+#### Validación
+
+- `git mv .agents/rules/proposed-contributor-rules.md agents/rules/proposed-contributor-rules.md` conservó el análisis; se comprobó que el archivo nuevo existe y el antiguo ya no.
+- Se comprobaron manualmente los cambios de arboles y referencias en README bilingues y AGENTS. Los enlaces internos de las cinco reglas ahora apuntan al archivo de Fase 2 dentro de su mismo directorio.
+- La única carpeta de instrucciones vigente es `agents/`; skills siguen siendo opcionales bajo `agents/skills`. No quedan rutas activas hacia `.agents/rules` ni `.agents/skills`.
+- Se comprobaron 90 enlaces locales en 10 documentos Markdown; no hay enlaces rotos. Hay seis archivos de reglas bajo `agents/rules`, `.agents` ya no existe y los controles de whitespace pasan.
+- No se cambiaron implementaciones, datos, rutas API, tests ni comportamiento. Antes del commit, el estado de Git contiene únicamente el traslado y las ediciones documentales de esta reorganización.
+
+Mensaje del commit dedicado: `Fase 3 — Ajustar carpeta agents a lo requerido (actualización) completada`.

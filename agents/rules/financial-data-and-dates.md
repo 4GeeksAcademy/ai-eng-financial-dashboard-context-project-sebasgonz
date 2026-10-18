@@ -2,7 +2,7 @@
 
 ## Alcance
 
-Generacion de movimientos en `backend/app/routes.py`, calculos de `frontend/src/lib` y textos de periodos. Concreta R04-R06 de [Fase 2](../../.agents/rules/proposed-contributor-rules.md). Regla candidata pendiente de aprobacion final.
+Generacion de movimientos en `backend/app/routes.py`, calculos de `frontend/src/lib` y textos de periodos. Concreta R04-R06 de [Fase 2](proposed-contributor-rules.md). Regla aprobada tras la validacion de Fase 3.
 
 ## Justificacion
 
