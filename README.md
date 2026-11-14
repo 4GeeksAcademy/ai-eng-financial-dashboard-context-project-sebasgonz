@@ -28,15 +28,20 @@ _Financial metrics dashboard with a React + TypeScript frontend and a FastAPI ba
 ## Expected agents directory structure
 
 ```text
-agents/
+.agents/
 ├─ rules/
 │  ├─ <rule-name>.md
 │  └─ proposed-contributor-rules.md (Phase 2 historical analysis)
+agents/
 └─ skills/ (optional)
    └─ <skill-name>/SKILL.md
+memory-bank/
+├─ projectbrief.md
+├─ techContext.md
+└─ progress.md
 ```
 
-Approved rules and the historical Phase 2 analysis are consolidated under [agents/rules](agents/rules), indexed by [AGENTS.md](AGENTS.md). If created, the optional skills directory belongs under `agents/skills`.
+Approved rules and the historical Phase 2 analysis are stored in [.agents/rules](.agents/rules), indexed by [AGENTS.md](AGENTS.md). If created, the optional skills directory belongs under `agents/skills`. Project context is divided into the [product brief](memory-bank/projectbrief.md), [technical context](memory-bank/techContext.md), and [progress](memory-bank/progress.md), indexed by [memory-bank/README.md](memory-bank/README.md).
 
 ## How to run locally
 

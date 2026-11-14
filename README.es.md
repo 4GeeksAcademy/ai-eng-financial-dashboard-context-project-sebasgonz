@@ -28,15 +28,20 @@ _Dashboard de métricas financieras con frontend en React + TypeScript y backend
 ## Estructura esperada del directorio para agentes
 
 ```text
-agents/
+.agents/
 ├─ rules/
 │  ├─ <nombre-regla>.md
 │  └─ proposed-contributor-rules.md (análisis histórico de Fase 2)
+agents/
 └─ skills/ (opcional)
    └─ <nombre-skill>/SKILL.md
+memory-bank/
+├─ projectbrief.md
+├─ techContext.md
+└─ progress.md
 ```
 
-Las reglas aprobadas y el análisis histórico de Fase 2 están consolidados en [agents/rules](agents/rules); [AGENTS.md](AGENTS.md) los indexa. La carpeta opcional de skills, si se crea, va en `agents/skills`.
+Las reglas aprobadas y el análisis histórico de Fase 2 están en [.agents/rules](.agents/rules); [AGENTS.md](AGENTS.md) los indexa. La carpeta opcional de skills, si se crea, va en `agents/skills`. El contexto del proyecto se divide en [brief del producto](memory-bank/projectbrief.md), [contexto técnico](memory-bank/techContext.md) y [progreso](memory-bank/progress.md), indexados por [memory-bank/README.md](memory-bank/README.md).
 
 ## Cómo ejecutar en local
 

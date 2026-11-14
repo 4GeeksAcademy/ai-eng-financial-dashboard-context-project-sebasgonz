@@ -90,13 +90,13 @@ Los tests existentes del frontend verifican utilidades financieras, no el nuevo 
 
 ### Objetivo y decisiones del usuario
 
-Identificar convenciones útiles y patrones arriesgados para futuros contribuidores o agents, conservando solo hallazgos vinculados a archivos o comportamientos concretos. El usuario eligió revisar frontend, backend, Docker y documentación, sin restricciones adicionales, y guardar las reglas propuestas. Inicialmente se redactaron en `.agents/rules`; en una actualización de Fase 3 se consolidaron en `agents/rules`. El usuario revisó y aprobó las 11 el 2026-10-17.
+Identificar convenciones útiles y patrones arriesgados para futuros contribuidores o agents, conservando solo hallazgos vinculados a archivos o comportamientos concretos. El usuario eligió revisar frontend, backend, Docker y documentación, sin restricciones adicionales, y guardar las reglas propuestas. Inicialmente se redactaron en `.agents/rules`; en una actualización de Fase 3 se consolidaron temporalmente en `agents/rules`, y posteriormente se restauraron en `.agents/rules` para cumplir la ubicación exigida por el rubric. El usuario revisó y aprobó las 11 el 2026-10-17.
 
 ### Trabajo realizado
 
 ✅ Se contrastaron contratos, utilidades financieras, tests, Compose y Dockerfile con el código real y las referencias de la Fase 1. Se descartaron recomendaciones genéricas sin evidencia local.
 
-✅ Se redactaron [11 reglas propuestas](agents/rules/proposed-contributor-rules.md), agrupadas por categoría. Cada regla identifica un hecho del repo, su riesgo, una acción propuesta y un criterio de comprobación:
+✅ Se redactaron [11 reglas propuestas](.agents/rules/proposed-contributor-rules.md), agrupadas por categoría. Cada regla identifica un hecho del repo, su riesgo, una acción propuesta y un criterio de comprobación:
 
 | Categoría | Reglas | Evidencia que motivó las propuestas |
 | --- | --- | --- |
@@ -125,17 +125,17 @@ Mensaje del commit de cierre: `Fase 2 — Identificar convenciones y patrones ar
 
 ### Alcance acordado y archivos redactados
 
-El usuario eligió `agents/rules` sin punto y autorizó solo documentación y comprobaciones, sin cambios de comportamiento. En la primera parte de Fase 3 se conservaron las propuestas históricas de Fase 2 en `.agents/rules`; la actualización de ubicación documentada abajo las consolida en el único directorio `agents/rules`. No se modificaron implementaciones, contratos ni tests existentes.
+El usuario eligió inicialmente `agents/rules` sin punto y autorizó solo documentación y comprobaciones, sin cambios de comportamiento. En la primera parte de Fase 3 se conservaron las propuestas históricas de Fase 2 en `.agents/rules`; la actualización de ubicación documentada abajo las consolidó en `agents/rules`. No se modificaron implementaciones, contratos ni tests existentes.
 
 Las 11 propuestas se concretaron en cinco archivos, cada uno con nombre, alcance, justificación respaldada por archivos, guía y criterio de salida. En ese momento estaban pendientes de revisión; el usuario aprobó las cinco guías al cerrar Fase 3, antes del commit `e0b9c0f`.
 
 | Regla | Propuestas de origen | Tarea pequeña real y resultado |
 | --- | --- | --- |
-| [Arquitectura y naming](agents/rules/architecture-and-naming.md) | R01–R03 | Se documentaron el contrato y el ejemplo `GET /api/metrics?operation_type=income` en ambos README. TestClient devolvió `200` y 197 registros; todos tenían los campos requeridos y eran ingresos. No se cambió la ruta. |
-| [Datos, fechas y precisión](agents/rules/financial-data-and-dates.md) | R04–R06 | Se documentaron datos de muestra, fórmula y limitación de fechas. Se ejecutaron las utilidades reales: ingresos `1000`, egresos `250`, utilidad `750`, porcentaje `75`; sin ingresos, porcentaje `0`. Con `2024-02-01`, la agrupación dio `Feb 2024` en UTC y `Jan 2024` en Los Ángeles. Defecto reproducido, no corregido. |
-| [Ejecución y red](agents/rules/runtime-and-networking.md) | R07, R11 | Se añadió tabla bilingüe de variables y límites de desarrollo. Se comparó Compose en JSON con consumidores y Dockerfile: servicios frontend/backend, puertos `5173`, `8000`, `5678`, destino gateway y alias correctos. No se iniciaron servidores ni se probó HTTP por Vite. |
-| [Testing y evidencia](agents/rules/testing-and-evidence.md) | R08–R09 | Se documentaron comandos aislados con `--no-deps`. Se ejecutaron los 5 tests de utilidades del frontend y 2 tests de filtros del backend: todos pasaron. Los otros 13 de backend quedaron excluidos en esta comprobación focalizada. |
-| [Documentación y workflow](agents/rules/documentation-and-workflow.md) | R10 y cierre acordado | Se corrigió el índice AGENTS y los árboles bilingües para la ubicación nueva y se añadió este registro. Pasaron los 62 enlaces locales, las anclas de Fase 3, la estructura de las cinco reglas y la paridad de comandos y variables entre README. El diff confirmó solo los nueve archivos documentales previstos; no se preparó ni creó commit. |
+| [Arquitectura y naming](.agents/rules/architecture-and-naming.md) | R01–R03 | Se documentaron el contrato y el ejemplo `GET /api/metrics?operation_type=income` en ambos README. TestClient devolvió `200` y 197 registros; todos tenían los campos requeridos y eran ingresos. No se cambió la ruta. |
+| [Datos, fechas y precisión](.agents/rules/financial-data-and-dates.md) | R04–R06 | Se documentaron datos de muestra, fórmula y limitación de fechas. Se ejecutaron las utilidades reales: ingresos `1000`, egresos `250`, utilidad `750`, porcentaje `75`; sin ingresos, porcentaje `0`. Con `2024-02-01`, la agrupación dio `Feb 2024` en UTC y `Jan 2024` en Los Ángeles. Defecto reproducido, no corregido. |
+| [Ejecución y red](.agents/rules/runtime-and-networking.md) | R07, R11 | Se añadió tabla bilingüe de variables y límites de desarrollo. Se comparó Compose en JSON con consumidores y Dockerfile: servicios frontend/backend, puertos `5173`, `8000`, `5678`, destino gateway y alias correctos. No se iniciaron servidores ni se probó HTTP por Vite. |
+| [Testing y evidencia](.agents/rules/testing-and-evidence.md) | R08–R09 | Se documentaron comandos aislados con `--no-deps`. Se ejecutaron los 5 tests de utilidades del frontend y 2 tests de filtros del backend: todos pasaron. Los otros 13 de backend quedaron excluidos en esta comprobación focalizada. |
+| [Documentación y workflow](.agents/rules/documentation-and-workflow.md) | R10 y cierre acordado | Se corrigió el índice AGENTS y los árboles bilingües para la ubicación nueva y se añadió este registro. Pasaron los 62 enlaces locales, las anclas de Fase 3, la estructura de las cinco reglas y la paridad de comandos y variables entre README. El diff confirmó solo los nueve archivos documentales previstos; no se preparó ni creó commit. |
 
 ### Refinamientos derivados de las tareas
 
@@ -170,16 +170,16 @@ Al redactar esta sección estaba pendiente la revisión final. Después, el usua
 
 #### Motivo y cambio
 
-Al revisar Fase 3, el usuario observó que coexistían `agents/rules` y `.agents/rules`, aunque el requisito indica `agents/rules`. Las cinco reglas ya vivían en la ubicación solicitada; el análisis histórico de Fase 2 era el único archivo bajo `.agents/rules`.
+Al revisar Fase 3, el usuario observó que coexistían `agents/rules` y `.agents/rules`; en esa revisión se eligió `agents/rules`. Las cinco reglas ya vivían allí; el análisis histórico de Fase 2 era el único archivo bajo `.agents/rules`.
 
-Se movió `proposed-contributor-rules.md` a `agents/rules` sin reescribir su contenido. Se actualizaron AGENTS, los dos README, las cinco reglas y este historial para apuntar a la ruta única. La guía de descubrimiento de skills se alineó a `agents/skills` como directorio opcional. Se quitaron `.agents/rules` y `.agents` cuando quedaron vacíos. La mención de `.agents/rules` en esta historia conserva la ubicación original, no una ruta vigente.
+Se movió `proposed-contributor-rules.md` a `agents/rules` sin reescribir su contenido. Se actualizaron AGENTS, los dos README, las cinco reglas y este historial para apuntar a la ruta única. La guía de descubrimiento de skills se alineó a `agents/skills` como directorio opcional. Se quitaron `.agents/rules` y `.agents` cuando quedaron vacíos. Este párrafo registra una decisión histórica que fue revertida ante la observación actual del rubric.
 
 #### Validación
 
-- `git mv .agents/rules/proposed-contributor-rules.md agents/rules/proposed-contributor-rules.md` conservó el análisis; se comprobó que el archivo nuevo existe y el antiguo ya no.
+- `git mv .agents/rules/proposed-contributor-rules.md agents/rules/proposed-contributor-rules.md` conservó el análisis en esa fase; el archivo está ahora en [.agents/rules/proposed-contributor-rules.md](.agents/rules/proposed-contributor-rules.md).
 - Se comprobaron manualmente los cambios de arboles y referencias en README bilingues y AGENTS. Los enlaces internos de las cinco reglas ahora apuntan al archivo de Fase 2 dentro de su mismo directorio.
-- La única carpeta de instrucciones vigente es `agents/`; skills siguen siendo opcionales bajo `agents/skills`. No quedan rutas activas hacia `.agents/rules` ni `.agents/skills`.
-- Se comprobaron 90 enlaces locales en 10 documentos Markdown; no hay enlaces rotos. Hay seis archivos de reglas bajo `agents/rules`, `.agents` ya no existe y los controles de whitespace pasan.
+- En esa actualización la carpeta vigente era `agents/`; skills siguen siendo opcionales bajo `agents/skills`. Esta configuración ya no es la vigente.
+- Se comprobaron 90 enlaces locales en 10 documentos Markdown en esa fase. Entonces había seis archivos de reglas bajo `agents/rules` y `.agents` no existía; esos resultados son históricos.
 - No se cambiaron implementaciones, datos, rutas API, tests ni comportamiento. Antes del commit, el estado de Git contiene únicamente el traslado y las ediciones documentales de esta reorganización.
 
 Mensaje del commit dedicado: `Fase 3 — Ajustar carpeta agents a lo requerido (actualización) completada`.
@@ -211,3 +211,11 @@ No se ejecutó build ni prueba visual en esta fase. El arranque y las respuestas
 ### Revisión y commit
 
 Pendiente de revisión del usuario. El commit dedicado se creará solo después de su aprobación; hasta entonces no se prepara ni se incluye ningún cambio en staging.
+
+## Actualización solicitada por el rubric: ubicación de reglas y memoria estructurada
+
+El profesor señaló que las reglas deben estar en `.agents/rules` y que el memory-bank debe separar el brief del producto, contexto técnico y progreso. Se trasladaron los seis documentos de reglas desde `agents/rules` a `.agents/rules`; [AGENTS.md](AGENTS.md), README bilingüe y las referencias internas se actualizaron para apuntar a la ubicación vigente. La sección anterior de Fase 3 se conserva como historial de la decisión previa, no como instrucción actual.
+
+El antiguo documento único de memoria se reemplazó por [projectbrief.md](memory-bank/projectbrief.md), [techContext.md](memory-bank/techContext.md) y [progress.md](memory-bank/progress.md); [memory-bank/README.md](memory-bank/README.md) sirve de índice. Los documentos distinguen hechos observados, gaps y validaciones históricas; no afirman que dichas pruebas se hayan reejecutado durante esta actualización. No se modificó código funcional.
+
+Pendiente de validación final y revisión del usuario. No se creó commit ni se añadió nada al staging.
