@@ -2,16 +2,27 @@
 
 Especificaciones de producto y criterios de aceptación para las funcionalidades solicitadas. Se revisó Swagger UI en `http://localhost:8000/docs` y el esquema OpenAPI servido por la instancia local antes de redactar estos documentos. Los contratos documentados aquí describen lo observado; los requisitos de producto y las diferencias con la implementación se señalan por separado.
 
-**Alcance de estos entregables:** especificación de la capa frontend únicamente. `types.ts` contiene definiciones TypeScript de contratos y modelos de presentación; `components.md` especifica responsabilidades propuestas. No crear componentes React, no integrar endpoints ni alterar backend como parte de esta fase.
+**Alcance de estos entregables:** especificación de la capa frontend únicamente. No crear componentes React, no integrar endpoints ni alterar backend como parte de estas fases.
+
+## Fase 1 — Requisitos y exploración de API
+
+Especificaciones funcionales y registro de cómo los requisitos se relacionan con la API observada.
 
 - [Filtro de rango de fechas en el dashboard principal](dashboard-date-range.md)
 - [Tabla de alertas de anomalías](dashboard-anomaly-alerts.md)
 - [Vista comparativa B2B vs B2C](b2b-vs-b2c-comparison.md)
-- [Fase 1 — exploración de endpoints, payloads y desajustes](phase-1-api-exploration.md)
-- [Tipos TypeScript de contratos y view-models](types.ts)
 - [Especificación de componentes y composición](components.md)
+- [Fase 1 — exploración de endpoints, payloads y desajustes](phase-1-api-exploration.md)
 
-El documento de exploración registra la consulta a `/docs`, parámetros/respuestas OpenAPI, muestras HTTP y contraste con el fetch actual del frontend. La implementación no se modificó.
+La exploración registra la consulta a `/docs`, parámetros y respuestas OpenAPI, muestras HTTP y contraste con el fetch actual del frontend. Los requisitos y diferencias respecto al contrato real se detallan en sus especificaciones; la implementación no se modificó.
+
+## Fase 2 — Tipos y diseño de componentes
+
+Definiciones de tipos TypeScript para los contratos observados y modelos de presentación, además de la propuesta de responsabilidades y composición de componentes. Son documentos de diseño, no implementación.
+
+- [Tipos TypeScript de contratos y view-models](types.ts)
+- [Tipos TypeScript de respuestas de API](api-types.ts)
+- [Tipos TypeScript de parámetros de consulta](param-types.ts)
 
 ## Nota sobre datos observados
 
