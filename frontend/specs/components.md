@@ -43,11 +43,14 @@ Este documento define responsabilidades, props conceptuales y decisiones de prod
 
 **Responsabilidad:** coordinar el filtro con los datos actuales de KPIs, gráficos y alertas; asegurar que todo lo mostrado use exactamente el mismo intervalo válido. Los hijos no construyen URLs ni deciden qué datos solicitar.
 
+**Props:** ninguna prop externa requerida; es un contenedor/página que posee el estado compartido. Si se integra dentro de otro contenedor, cualquier inyección de estado queda fuera de este contrato.
+
 **Modelo de estado conceptual:**
 
 - `dateRange: DateRangeFilter` para estado de UI.
 - Al construir parámetros de `/api/metrics` o `/api/metrics/alerts`, mapear `startDate` → `start_date` y `endDate` → `end_date`, con formato `ISODate` (`YYYY-MM-DD`). Los parámetros opcionales ausentes se omiten.
 - Estado de carga/error de movimientos y facets separado o claramente atribuible; los datos de facets fallidos no se reemplazan con valores fijos.
+- **Renderizado condicional:** mientras facets carga, mantener los controles deshabilitados o indicar carga sin inventar límites; si facets falla, mostrar el error y no un rango ficticio. Con rango invertido, conservar los valores y mostrar validación sin aplicar la consulta. En carga de movimientos, mostrar loading; en error, error visible; con éxito `[]`, estado vacío de movimientos; con éxito no vacío, renderizar los KPIs/gráficos del rango activo. Cada estado de alertas se renderiza aparte según `AnomalyAlertsSection.status`.
 
 ## Funcionalidad 2 — Alertas de anomalías
 
@@ -72,6 +75,12 @@ Este documento define responsabilidades, props conceptuales y decisiones de prod
 
 Control interno de la sección; usa el concepto de [`AnomalyThresholdControl`](types.ts) para el estado del control y `AlertsParams.threshold` para el parámetro API.
 
+| Prop | Tipo | Semántica |
+| --- | --- | --- |
+| `value` | `number` | Umbral actual como ratio fraccional. |
+| `onChange` | `(next: number) => void` | Emite solo un valor dentro de los límites de producto. |
+| `disabled` | `boolean` | Deshabilita la edición mientras lo determine la sección/contenedor. |
+
 - El rango de producto es `0.01`–`1.0`, inclusive; valor inicial `0.3`; step visual recomendado `0.01`.
 - El valor es una fracción, no porcentaje entero: `0.3` representa 30%. No convertir a `30` al solicitar el endpoint.
 - Aunque OpenAPI acepta cualquier número `>= 0` sin máximo, la UI restringe a las reglas de producto más estrictas. El backend no se asume modificado.
@@ -81,7 +90,15 @@ Control interno de la sección; usa el concepto de [`AnomalyThresholdControl`](t
 
 **Ubicación propuesta:** componente interno; extraer a `frontend/src/components/dashboard/anomaly-alerts-table.tsx` solo si hay reutilización real.
 
-**Datos:** recibe `AlertEntry[]`; cada fila usa `period`, `outcome_total`, `baseline_average` e `increase_ratio` sin cambiar los nombres del contrato.
+**Props conceptuales:**
+
+| Prop | Tipo | Semántica |
+| --- | --- | --- |
+| `alerts` | `AlertEntry[]` | Filas exitosas del endpoint, puede ser `[]`. |
+| `status` | `"loading" \| "error" \| "success"` | Determina qué estado se renderiza; no inferir error a partir de `[]`. |
+| `errorMessage` | `string \| null` | Mensaje mostrado solo cuando el estado es error. |
+
+Cada fila usa `period`, `outcome_total`, `baseline_average` e `increase_ratio` sin cambiar los nombres del contrato.
 
 **Presentación y estados:**
 
@@ -105,6 +122,8 @@ La agrupación mensual es la decisión inicial para coincidir con los gráficos 
 
 **Responsabilidad:** presentar una nueva vista navegable separada del dashboard principal, con un solo filtro de fecha compartido y resultados sincronizados para B2B y B2C. No se ha identificado una convención existente de routing que deba imponerse ahora.
 
+**Props:** ninguna prop externa requerida; la página coordina el rango, facets y estados de los dos grupos.
+
 **Composición:**
 
 1. `DashboardDateRangeFilter` (o el mismo contrato visual) usando facets como fuente del rango disponible.
@@ -115,15 +134,23 @@ La agrupación mensual es la decisión inicial para coincidir con los gráficos 
 
 **Ubicación propuesta:** `frontend/src/components/dashboard/business-income-section.tsx`.
 
-**Props conceptuales:** `summary: BusinessIncomeSummary | null`, `status: "loading" | "error" | "success"`, y `errorMessage: string | null`. `summary` es `null` mientras no exista un resultado válido; no usar un resumen vacío para representar una carga o error.
+**Props conceptuales:**
+
+| Prop | Tipo | Semántica |
+| --- | --- | --- |
+| `summary` | `BusinessIncomeSummary \| null` | `null` mientras no exista un resultado válido; no usar resumen vacío para carga/error. |
+| `status` | `"loading" \| "error" \| "success"` | Estado explícito para renderizado condicional del panel. |
+| `errorMessage` | `string \| null` | Mensaje mostrado en estado de error. |
 
 **Responsabilidad y presentación:**
 
 - Mostrar `summary.businessType`, `summary.totalIncome` y tabla de `summary.topCategories` (hasta cinco filas), ordenada por importe descendente.
 - Columnas: categoría, total de ingresos y porcentaje del ingreso completo del grupo (`percentageOfGroupIncome`). La fila usa `TopIncomeCategoryRow`; el porcentaje no viene de la API.
 - El total representa todos los movimientos `income` del grupo y rango, no la suma del top cinco.
+- En `status="success"`, si `summary.topCategories` está vacío, conservar el encabezado/estructura de la tabla y mostrar un estado vacío explícito para ese panel (por ejemplo, “No hay categorías de ingreso para este rango”); no crear filas ficticias. Esto se aplica por separado a los paneles B2B y B2C.
 - `success` con cero ingresos muestra total `0` y un estado sin categorías; porcentaje `0` cuando el denominador es cero. No representar `NaN`/infinito.
 - Un error o carga afecta/identifica el grupo correspondiente. El contenedor coordina ambos grupos y explica si el resultado global no es comparable por fallo parcial.
+- **Renderizado condicional:** `loading` muestra carga para ese grupo; `error` muestra `errorMessage` y no una tabla vacía; `success` muestra total y tabla, y si `topCategories` está vacío muestra el estado vacío anterior dentro del panel.
 
 ### `BusinessIncomeComparisonChart`
 

@@ -5,7 +5,6 @@
 
 import type {
   BusinessType,
-  ISODate,
   MetricsGroupBy,
   OperationType,
 } from "./types";
@@ -13,18 +12,16 @@ import type {
 /** Optional date bounds shared by the alerts and top-categories endpoints. */
 export interface DateRangeFilter {
   /**
-    * Optional nullable lower calendar-date bound, serialized as `YYYY-MM-DD`;
-    * omit when no lower bound is selected. OpenAPI does not declare an ordering
-    * constraint relative to `end_date`.
+   * Optional lower calendar date in `YYYY-MM-DD` format; omit when unset.
+   * OpenAPI does not declare an ordering constraint relative to `end_date`.
    */
-    start_date?: ISODate | null;
+  start_date?: string;
 
   /**
-    * Optional nullable upper calendar-date bound, serialized as `YYYY-MM-DD`;
-    * omit when no upper bound is selected. OpenAPI does not declare an ordering
-    * constraint relative to `start_date`.
+   * Optional upper calendar date in `YYYY-MM-DD` format; omit when unset.
+   * OpenAPI does not declare an ordering constraint relative to `start_date`.
    */
-    end_date?: ISODate | null;
+  end_date?: string;
 }
 
 /** Query parameters accepted by GET /api/metrics/alerts. */
@@ -44,10 +41,10 @@ export interface AlertsParams extends DateRangeFilter {
   group_by?: MetricsGroupBy;
 
   /**
-  * Optional nullable segment filter: `B2B` or `B2C`; omission includes both
-  * segments.
+    * Optional segment filter: `B2B` or `B2C`; omit when unset to include both
+    * segments.
    */
-  business_type?: BusinessType | null;
+    business_type?: BusinessType;
 }
 
 /** Query parameters accepted by GET /api/metrics/categories/top. */
@@ -64,8 +61,8 @@ export interface TopCategoriesParams extends DateRangeFilter {
   limit?: number;
 
   /**
-  * Optional nullable segment filter: `B2B` or `B2C`; omission includes both
-  * segments.
+   * Optional segment filter: `B2B` or `B2C`; omit when unset to include both
+   * segments.
    */
-  business_type?: BusinessType | null;
+  business_type?: BusinessType;
 }

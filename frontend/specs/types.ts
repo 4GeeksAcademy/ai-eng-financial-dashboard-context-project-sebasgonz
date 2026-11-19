@@ -44,8 +44,11 @@ export interface DateRangeQuery {
 
 /** UI filter state; omit either bound when it is unset. */
 export interface DateRangeFilter {
-  startDate?: ISODate;
-  endDate?: ISODate;
+  /** Optional calendar date in `YYYY-MM-DD` format. */
+  startDate?: string;
+
+  /** Optional calendar date in `YYYY-MM-DD` format. */
+  endDate?: string;
 }
 
 /** Existing GET /api/metrics/alerts query parameters and backend limits. */
