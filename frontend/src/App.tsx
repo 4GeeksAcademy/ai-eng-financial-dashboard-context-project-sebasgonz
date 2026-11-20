@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { KPIRow } from "@/components/dashboard/kpi-row";
-import { IncomeOutcomeChart } from "@/components/dashboard/income-outcome-chart";
-import { ProfitPercentChart } from "@/components/dashboard/profit-percent-chart";
+import { ChartSkeleton } from "@/components/dashboard/chart-skeleton";
 import {
   type FinancialMovement,
   type KPIMetrics,
@@ -11,6 +10,18 @@ import {
 import { computeKPIs, computeMonthlyData } from "@/lib/financial-utils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
+
+// Recharts is the heaviest dependency; keep it out of the initial chunk.
+const IncomeOutcomeChart = lazy(() =>
+  import("@/components/dashboard/income-outcome-chart").then((m) => ({
+    default: m.IncomeOutcomeChart,
+  })),
+);
+const ProfitPercentChart = lazy(() =>
+  import("@/components/dashboard/profit-percent-chart").then((m) => ({
+    default: m.ProfitPercentChart,
+  })),
+);
 
 function formatPeriodLabel(date: string): string {
   const year = Number(date.slice(0, 4));
@@ -39,11 +50,15 @@ function App() {
   useEffect(() => {
     fetchFinancialData()
       .then((movements) => {
-        const dates = movements.map((movement) => movement.create_date).sort();
+        const dates = movements.map((movement) => movement.create_date);
         if (dates.length > 0) {
-          setPeriod(
-            `${formatPeriodLabel(dates[0])} - ${formatPeriodLabel(dates[dates.length - 1])}`,
-          );
+          let first = dates[0];
+          let last = dates[0];
+          for (const date of dates) {
+            if (date < first) first = date;
+            if (date > last) last = date;
+          }
+          setPeriod(`${formatPeriodLabel(first)} - ${formatPeriodLabel(last)}`);
         }
         setMetrics(computeKPIs(movements));
         setMonthlyData(computeMonthlyData(movements));
@@ -82,8 +97,12 @@ function App() {
             aria-label="Financial charts"
             className="grid grid-cols-1 gap-4 xl:grid-cols-2"
           >
-            <IncomeOutcomeChart data={monthlyData} loading={loading} />
-            <ProfitPercentChart data={monthlyData} loading={loading} />
+            <Suspense fallback={<ChartSkeleton />}>
+              <IncomeOutcomeChart data={monthlyData} loading={loading} />
+            </Suspense>
+            <Suspense fallback={<ChartSkeleton />}>
+              <ProfitPercentChart data={monthlyData} loading={loading} />
+            </Suspense>
           </section>
         </div>
       </div>
