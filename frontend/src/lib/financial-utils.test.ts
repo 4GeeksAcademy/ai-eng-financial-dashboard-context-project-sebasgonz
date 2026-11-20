@@ -101,6 +101,22 @@ describe("computeMonthlyData", () => {
       profitPercent: 100,
     });
   });
+
+  // Known defect (README "Data and Calculations"): ISO dates parse as UTC and are
+  // grouped by local month. Remove `.fails` once the grouping is fixed.
+  it.fails("groups a first-of-month ISO date into its own month west of UTC", () => {
+    const monthlyData = computeMonthlyData([
+      {
+        create_date: "2024-02-01",
+        amount: 500,
+        operation_type: "income",
+        category: "sales",
+        business_type: "B2C",
+      },
+    ]);
+
+    expect(monthlyData[0].month).toBe("Feb 2024");
+  });
 });
 
 describe("formatters", () => {
